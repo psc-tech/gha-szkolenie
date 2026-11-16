@@ -8,6 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Show OS1
+        shell: bash
         run: |
           echo "This job is running on an Ubuntu runner."
           lsb_release -a
@@ -17,6 +18,7 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Show OS2
+        shell: bash
         run: |
           echo "This job is running on a Windows runner."
           echo "$RUNNER_OS"
@@ -24,6 +26,7 @@ jobs:
     runs-on: macos-latest
     steps:
       - name: Show OS3
+        shell: bash
         run: |
           echo "This job is running on a MacOS runner."
           echo "$RUNNER_OS
