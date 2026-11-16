@@ -29,5 +29,5 @@ jobs:
         shell: bash
         run: |
           echo "This job is running on a MacOS runner."
-          echo "$RUNNER_OS
+          echo "$RUNNER_OS"
           
