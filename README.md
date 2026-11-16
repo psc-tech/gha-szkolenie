@@ -1,2 +1,3 @@
 # gha-szkolenie
+Szkoelnie
 GHA
