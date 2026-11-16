@@ -10,4 +10,14 @@ jobs:
       - name: Show OS
         run: |
           echo "This job is running on an Ubuntu runner."
-          cat /etc/os-release
+          lsb_release -a
+          echo "${{ RUNNER_OS }}"
+        #cat /etc/os-release
+  windows-echo:
+    runs-on: windows-latest
+    steps:
+      - name: Show OS
+        run: |
+          echo "This job is running on a Windows runner."
+          echo "${{ RUNNER_OS }}"
+          
