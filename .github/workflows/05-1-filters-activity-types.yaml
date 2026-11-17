@@ -1,0 +1,19 @@
+name: 05 – Event Filters and Activity Types -1
+
+on: 
+  pull_request:
+    types: 
+      - opened
+      - synchronize
+    branches:
+      - main
+
+jobs:
+  echo:
+    runs-on: selfhostlinux
+    defaults:
+      run:
+        working-directory: CWICZENIA/05-usung-filters-and-activity-types/react-app
+    steps:
+      - name: Echo
+        run: echo "Running whenever a PR is opened or synchronized AND base branch is main."
