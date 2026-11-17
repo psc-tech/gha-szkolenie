@@ -59,4 +59,7 @@ jobs:
         run: |
           docker stop pogoda_api || true
           docker rm pogoda_api || true
+      #8
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
