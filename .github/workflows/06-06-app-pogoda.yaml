@@ -1,0 +1,62 @@
+name: "06-06 Pogoda API CI"
+
+on:
+  push:
+    branches:
+      - feature/06-pogoda-api
+      - main
+  pull_request:
+    branches:
+      - feature/06-pogoda-api
+  workflow_dispatch:
+
+env:
+  MY_KLUCZYK: '9ab97aa4e9f307c97e35ae21a2410532'
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    env:
+      LOCAL_IMAGE_NAME: python_pogoda:test
+      WORKDIR: ./CWICZENIA/06-context/pogoda_python_flusk
+    # defaults:
+    #   run:
+    #     working-directory: CWICZENIA/06-context/pogoda_python_flusk
+    steps:
+      # 1
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      # 2
+      - name: Build docker
+        # shell: bash
+        run: docker build -t "$LOCAL_IMAGE_NAME" "$WORKDIR"
+      # 3
+      - name: Run docker
+        # shell: bash
+        run: docker run -d  --name pogoda_api  -p 8000:8000   -e OPENWEATHER_API_KEY="${{ secrets.OPENWEATHER_API_KEY }}"  "$LOCAL_IMAGE_NAME"
+      #4 
+      - name: Start docker
+        run: |
+          echo "Czekam na start API..."
+          sleep 10
+      #5
+      - name: Test
+        run: |
+          set -e
+          echo "Testowanie endpointu /weather..."
+          curl -f "http://localhost:8000/weather?city=Warsaw&api_key=${{ secrets.OPENWEATHER_API_KEY }}"
+          echo
+          echo "OK - endpoint /weather zwrócił odpowiedź 2xx."
+      #6
+      - name: Logs
+        if: failure()
+        run: |
+          echo "Logi kontenera:"
+          docker logs pogoda_api || true
+      #7
+      - name: Stop
+        if: always()
+        run: |
+          docker stop pogoda_api || true
+          docker rm pogoda_api || true
+
