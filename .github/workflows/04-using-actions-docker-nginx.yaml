@@ -54,3 +54,13 @@ jobs:
 
           # Sprawdzamy, że treść zawiera frazę "szkolenie github" (case-insensitive)
           echo "$BODY" | grep -qi "szkolenie github"
+
+      - name: Cleanup
+        if: always()
+        run: |
+          set -eux
+          # pokaż logi z kontenera (pomocne przy debugowaniu)
+          if [ -n "${CID:-}" ]; then
+            docker logs "$CID" || true
+            docker rm -f "$CID" || true
+          fi
