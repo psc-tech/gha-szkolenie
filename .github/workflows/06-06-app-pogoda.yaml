@@ -11,7 +11,7 @@ on:
   workflow_dispatch:
 
 env:
-  MY_KLUCZYK: '9ab97aa4e9f307c97e35ae21a2410532'
+  MY_KLUCZYK: ${{ secrets.OPENWEATHER_API_KEY }}
 
 jobs:
   build-and-test:
@@ -44,7 +44,7 @@ jobs:
         run: |
           set -e
           echo "Testowanie endpointu /weather..."
-          curl -f "http://localhost:8000/weather?city=Warsaw&api_key=${{ secrets.OPENWEATHER_API_KEY }}"
+          curl -f "http://localhost:8000/weather?city=Warsaw&api_key=${MY_KLUCZYK}"
           echo
           echo "OK - endpoint /weather zwrócił odpowiedź 2xx."
       #6
