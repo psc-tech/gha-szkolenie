@@ -1,13 +1,13 @@
 name: "06-06 Pogoda API CI"
 
 on:
-  push:
-    branches:
-      - feature/06-pogoda-api
-      - main
-  pull_request:
-    branches:
-      - feature/06-pogoda-api
+  # push:
+  #   branches:
+  #     - feature/06-pogoda-api
+  #     - main
+  # pull_request:
+  #   branches:
+  #     - feature/06-pogoda-api
   workflow_dispatch:
 
 env:
