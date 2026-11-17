@@ -43,3 +43,14 @@ jobs:
           done
           echo "Nginx nie wstał na czas" >&2
           exit 1
+
+      - name: Test page content with curl
+        run: |
+          set -eux
+          BODY=$(curl -fsS http://localhost:8080/)
+          echo "----- PAGE BODY START -----"
+          echo "$BODY"
+          echo "------ PAGE BODY END ------"
+
+          # Sprawdzamy, że treść zawiera frazę "szkolenie github" (case-insensitive)
+          echo "$BODY" | grep -qi "szkolenie github"
