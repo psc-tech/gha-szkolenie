@@ -5,7 +5,7 @@ on:
     inputs:
       city:
         type: string
-        default: warsaw
+        default: Warsaw
 
 env:
   MY_KLUCZYK: '9ab97aa4e9f307c97e35ae21a2410532'
@@ -13,6 +13,7 @@ env:
 jobs:
   echo-data:
     runs-on: ubuntu-latest
+    shell: bash
     defaults:
       run:
         working-directory: CWICZENIA/06-context/pogoda
@@ -22,4 +23,6 @@ jobs:
         uses: actions/checkout@v4
       # 2
       - name: Skrypt
-        run: ./start.sh ${{ inputs.city }} ${{ env.MY_KLUCZYK }}
+        run: |
+          chmod +x ./start.sh 
+          sudo ./start.sh ${{ inputs.city }} ${{ env.MY_KLUCZYK }}
