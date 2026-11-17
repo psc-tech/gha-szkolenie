@@ -25,7 +25,7 @@ jobs:
       #   uses: docker/setup-buildx-action@v3
 
       - name: Build Docker image
-        uses: actions/metadata-action@v5
+        uses: docker/metadata-action@v5
         with:
           images: ${{ env.IMAGE_NAME }}
           tags: ${{ env.TAG }}
