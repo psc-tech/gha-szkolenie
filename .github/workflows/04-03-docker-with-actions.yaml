@@ -1,0 +1,71 @@
+name: 04 - Docker Web CI - with actions
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: CWICZENIA/04-praca-z-zewnetrzymi-akcjami/docker-app
+    env:
+      IMAGE_NAME: webapp
+      TAG: ${{ github.sha }}
+      HOST_PORT: 8080
+      CONTAINER_PORT: 80
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+    # (opcjonalnie) Setup Buildx - przydaje się przy bardziej złożonych buildach
+      # - name: Set up Docker Buildx
+      #   uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image
+        uses: actions/metadata-action@v5
+        with:
+          images: ${{ env.IMAGE_NAME }}
+          tags: ${{ env.TAG }}
+
+      - name: Run container
+        run: |
+          set -eux
+          # uruchamiamy w tle, mapujemy port 8080 na hosta
+          CID=$(docker run -d -p 8080:80 "${IMAGE_TAG}")
+          echo "CID=${CID}" >> "$GITHUB_ENV"
+
+      - name: Wait for Nginx to be ready
+        run: |
+          set -eux
+          for i in {1..30}; do
+            if curl -fsS http://localhost:8080/ >/dev/null; then
+              echo "Nginx odpowiada"; exit 0
+            fi
+            sleep 1
+          done
+          echo "Nginx nie wstał na czas" >&2
+          exit 1
+
+      - name: Test page content with curl
+        run: |
+          set -eux
+          BODY=$(curl -fsS http://localhost:8080/)
+          echo "----- PAGE BODY START -----"
+          echo "$BODY"
+          echo "------ PAGE BODY END ------"
+
+          # Sprawdzamy, że treść zawiera frazę "szkolenie github" (case-insensitive)
+          echo "$BODY" | grep -qi "szkolenie github"
+
+      - name: Cleanup
+        if: always()
+        run: |
+          set -eux
+          # pokaż logi z kontenera (pomocne przy debugowaniu)
+          if [ -n "${CID:-}" ]; then
+            docker logs "$CID" || true
+            docker rm -f "$CID" || true
+          fi
