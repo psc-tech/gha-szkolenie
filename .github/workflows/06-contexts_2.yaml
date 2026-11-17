@@ -1,0 +1,25 @@
+name: 06 – Contexts -2
+
+on:
+  workflow_dispatch:
+    inputs:
+      city:
+        type: string
+        default: warsaw
+
+env:
+  MY_KLUCZYK: '9ab97aa4e9f307c97e35ae21a2410532'
+
+jobs:
+  echo-data:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: CWICZENIA/06-context/pogoda
+    steps:
+      # 1
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      # 2
+      - name: Skrypt
+        run: ./start.sh ${{ inputs.city }} ${{ env.MY_KLUCZYK }}
