@@ -1,0 +1,24 @@
+name: 06 – Contexts
+
+on: 
+  workflow_dispatch:
+  push:
+
+jobs:
+  echo-data:
+    runs-on: selfhostlinux
+    # runs-on: ubuntu-latest
+    # defaults:
+    #   run:
+    #     working-directory: CWICZENIA/04-praca-z-zewnetrzymi-akcjami/react-app
+    steps:
+      # 1
+      - name: Display Information
+        run: |
+          echo "Event name: ${{ github.event_name }}"
+          echo "Ref: ${{ github.ref }}"
+          echo "SHA: ${{ github.sha }}"
+          echo "Actor: ${{ github.actor }}"
+          echo "Workflow: ${{ github.workflow }}"
+          echo "Run ID: ${{ github.run_id }}"
+          echo "Run number: ${{ github.run_number }}"
