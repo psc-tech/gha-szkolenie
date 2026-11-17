@@ -25,4 +25,4 @@ jobs:
         shell: bash
         run: |
           chmod +x ./start.sh 
-          sudo ./start.sh ${{ inputs.city }} ${{ env.MY_KLUCZYK }} 
+          sudo ./start.sh ${{ inputs.city }} ${{ env.MY_KLUCZYK }} >> $GITHUB_STEP_SUMMARY
