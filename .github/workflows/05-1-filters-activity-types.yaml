@@ -13,7 +13,7 @@ jobs:
     runs-on: selfhostlinux
     defaults:
       run:
-        working-directory: CWICZENIA/05-usung-filters-and-activity-types/react-app
+        working-directory: CWICZENIA/05-usung-filters-and-activity-types
     steps:
       - name: Echo
         run: echo "Running whenever a PR is opened or synchronized AND base branch is main."
