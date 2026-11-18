@@ -10,15 +10,15 @@ on:
 
 jobs:
   echo:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Print start-up data
-        if: inputs.debug == true 
-        run: |
-          echo "Triggered by: ${{ github.event_name }}"
-          echo "Branch: ${{ github.ref }}"
-          echo "Commit SHA: ${{ github.sha }}"
-          echo "Runner OS: ${{ runner.os }}"
-      - name: Print when triggered from main
-        if: inputs.debug == true && github.ref == 'refs/heads/main
-        run: |
+    # runs-on: ubuntu-latest
+    # steps:
+    #   - name: Print start-up data
+    #     if: inputs.debug == true 
+    #     run: |
+    #       echo "Triggered by: ${{ github.event_name }}"
+    #       echo "Branch: ${{ github.ref }}"
+    #       echo "Commit SHA: ${{ github.sha }}"
+    #       echo "Runner OS: ${{ runner.os }}"
+    #   - name: Print when triggered from main
+    #     if: inputs.debug == true && github.ref == 'refs/heads/main
+    #     run: |
