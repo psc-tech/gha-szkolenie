@@ -7,9 +7,14 @@ on:
       debug:
         type: boolean
         default: false
-
 jobs:
-  echo:
+  echo-hello:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Say Hello
+        run: echo "Hello, World"
+# jobs:
+#   echo:
     # runs-on: ubuntu-latest
     # steps:
     #   - name: Print start-up data
