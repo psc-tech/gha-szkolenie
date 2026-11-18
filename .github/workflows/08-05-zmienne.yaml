@@ -134,8 +134,8 @@ jobs:
         env:
           IMAGE_TAG: ${{ vars.IMAGE_TAG }}
         run: |
-          if [ "$IMAGE_TAG" != 'devpiotrkoska' ]; then
-            echo "::error::Ustaw IMAGE_TAG=devpiotrkoska w Environment dev."
+          if [ "$IMAGE_TAG" != 'devprzemek' ]; then
+            echo "::error::Ustaw IMAGE_TAG=devprzemek w Environment dev."
             exit 1
           fi
           echo "IMAGE_TAG=$IMAGE_TAG" >> "$GITHUB_ENV"
@@ -282,8 +282,8 @@ jobs:
         env:
           IMAGE_TAG: ${{ vars.IMAGE_TAG }}
         run: |
-          if [ "$IMAGE_TAG" != 'testpiotrkoska' ]; then
-            echo "::error::Ustaw IMAGE_TAG=testpiotrkoska w Environment test."
+          if [ "$IMAGE_TAG" != 'testprzemek' ]; then
+            echo "::error::Ustaw IMAGE_TAG=testprzemek w Environment test."
             exit 1
           fi
           echo "IMAGE_TAG=$IMAGE_TAG" >> "$GITHUB_ENV"
@@ -430,8 +430,8 @@ jobs:
         env:
           IMAGE_TAG: ${{ vars.IMAGE_TAG }}
         run: |
-          if [ "$IMAGE_TAG" != 'prodpiotrkoska' ]; then
-            echo "::error::Ustaw IMAGE_TAG=prodpiotrkoska w Environment prod."
+          if [ "$IMAGE_TAG" != 'prodprzemek' ]; then
+            echo "::error::Ustaw IMAGE_TAG=prodprzemek w Environment prod."
             exit 1
           fi
           echo "IMAGE_TAG=$IMAGE_TAG" >> "$GITHUB_ENV"
