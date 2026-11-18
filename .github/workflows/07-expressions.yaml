@@ -19,6 +19,6 @@ jobs:
           echo "Branch: ${{ github.ref }}"
           echo "Commit SHA: ${{ github.sha }}"
           echo "Runner OS: ${{ runner.os }}"
-      # - name: Skrypt
-      #   shell: bash
-      #   run: |
+      - name: [debug] Print when triggered from main
+        if: inputs.debug == true && github.ref == 'refs/heads/main
+        run: |
