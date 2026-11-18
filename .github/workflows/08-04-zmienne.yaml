@@ -101,7 +101,7 @@ jobs:
   build-and-push:
     runs-on: ubuntu-latest
     needs: test
-    # if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: github.event_name == 'pull_request' && github.ref == 'refs/heads/main'
     outputs:
       image_digest: ${{ steps.publish.outputs.digest }}
 
@@ -115,7 +115,7 @@ jobs:
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          username: ${{ vars.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build & push image to Docker Hub
@@ -160,7 +160,7 @@ jobs:
           docker run -d \
             --name ${{ vars.DEPLOY_CONTAINER_NAME }} \
             -p 127.0.0.1:${{ vars.DEPLOY_CONTAINER_PORT }}:8000 \
-            -e OPENWEATHER_API_KEY \
+            -e ${{env.OPENWEATHER_API_KEY}} \
             "${HUB_IMAGE_BASE}@${IMAGE_DIGEST}"
 
       - name: Verify deployed API is ready
