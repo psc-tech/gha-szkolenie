@@ -16,10 +16,10 @@ defaults:
 
 env:
   WORKDIR: ${{ vars.WORKDIR || './CWICZENIA/08-variables/pogoda_python_flusk' }}
-  DOCKERHUB_USERNAME: ${{ vars.DOCKERHUB_USERNAME || 'piotrskoska' }}
+  DOCKERHUB_USERNAME: ${{ vars.DOCKERHUB_USERNAME || 'przemek' }}
   DOCKER_IMAGE_NAME: ${{ vars.DOCKER_IMAGE_NAME || 'python_pogoda' }}
-  TEST_IMAGE: ${{ vars.DOCKERHUB_USERNAME || 'piotrskoska' }}/${{ vars.DOCKER_IMAGE_NAME || 'python_pogoda' }}
-  HUB_IMAGE_BASE: ${{ vars.DOCKERHUB_USERNAME || 'piotrskoska' }}/${{ vars.DOCKER_IMAGE_NAME || 'python_pogoda' }}
+  TEST_IMAGE: ${{ vars.DOCKERHUB_USERNAME || 'przemek' }}/${{ vars.DOCKER_IMAGE_NAME || 'python_pogoda' }}
+  HUB_IMAGE_BASE: ${{ vars.DOCKERHUB_USERNAME || 'przemek' }}/${{ vars.DOCKER_IMAGE_NAME || 'python_pogoda' }}
   CI_TAG: ci-${{ github.sha }}
   WEATHER_CITY: ${{ vars.WEATHER_CITY || 'Warsaw' }}
   DOCKERHUB_TAG: ${{ vars.DOCKERHUB_TAG }}
