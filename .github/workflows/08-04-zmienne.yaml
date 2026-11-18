@@ -70,7 +70,7 @@ jobs:
             -e OPENWEATHER_API_KEY="${{ secrets.OPENWEATHER_API_KEY }}" \
             "${{ env.TEST_IMAGE }}:${{ env.DOCKERHUB_TAG }}"
 
-      - name: Wait for API to be ready
+      - name: Wait for API to be ready2
         run: |
           echo "Czekam na start API..."
           sleep 10
