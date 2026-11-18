@@ -53,7 +53,7 @@ jobs:
       - name: Upload image artifact
         uses: actions/upload-artifact@v4
         with:
-          name: pogoda-image
+          name: pogoda-environments-image
           path: image.tar
 
   # =====================
