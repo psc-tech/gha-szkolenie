@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y curl htop vim tmux fontconfig
 RUN apt-get install -y wget unzip
 # Usuwamy domyślne pliki z katalogu HTML (opcjonalne)
 RUN rm -rf /usr/share/nginx/html/*
-RUN apt-get intall -y openjdk-21-jre
+RUN apt-get update && apt-get install -y openjdk-21-jre
 # Kopiujemy nasz index.html do katalogu serwowanego przez nginx
 COPY index.html /usr/share/nginx/html/index.html
 
