@@ -38,7 +38,7 @@ defaults:
 
 env:
   APP_DIR: ./CWICZENIA/12A-Cwiczenia-pipeline-gha/pogoda_python_flusk
-  IMAGE_REPOSITORY: ${{ vars.DOCKERHUB_USERNAME }}/${{ vars.DOCKER_IMAGE_NAME }}
+  IMAGE_REPOSITORY: ${{ vars.DOCKERHUB_USERNAME2 }}/${{ vars.DOCKER_IMAGE_NAME }}
 
 jobs:
   prepare:
