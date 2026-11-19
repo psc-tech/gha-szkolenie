@@ -31,7 +31,7 @@ defaults:
 # FAZA3_CONTAINER_NAME  | pogoda_api_faza3_test  | pogoda_api_faza3_dev  | pogoda_api_faza3_prod
 # FAZA3_WEATHER_CITY    | Warsaw                | Warsaw               | Warsaw
 # Environment secrets mogą nadpisać DOCKERHUB_TOKEN i OPENWEATHER_API_KEY.
-# Klucz API trafia tylko do docker run, nigdy do obrazu, cache ani metadanych release.
+# Klucz API trafia tylko do docker runsudo apt-get install -y jq coreutils diffutils, nigdy do obrazu, cache ani metadanych release.
 #
 # 4 definicje jobów → 8 uruchomień: build + test + 3 publikacje + 3 deploye.
 # Wszystkie publikacje muszą się udać, zanim ruszy macierz deploy.
