@@ -1,0 +1,62 @@
+name: 15A FAZA-1 — Pogoda WWW i API
+
+on:
+    workflow_dispatch:
+    push:
+        branches:
+        - main  
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: bash
+    # working-directory: ./CWICZENIA/13-caching/docker02
+
+env:
+  APP_DIR: ./CWICZENIA/15A-Cwiczenia-pipeline-gha/pogoda_python_flusk
+  HUB_IMAGE_BASE: ${{ vars.DOCKERHUB_USERNAME2 }}/${{ vars.DOCKER_IMAGE_NAME }}
+  CI_IMAGE:  $HUB_IMAGE_BASE:ci-${{ github.sha }}
+  IMAGE_TAG: ${{ vars.FAZA1_IMAGE_TAG }}
+  APP_PORT: ${{ vars.FAZA1_APP_PORT }}
+  CONTAINER_NAME: ${{ vars.FAZA1_CONTAINER_NAME }}
+  WEATHER_CITY: ${{ vars.FAZA1_WEATHER_CITY }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+    #   - name: Cache Docker layers
+    #     id: cache
+    #     uses: actions/cache@v4
+    #     with:
+    #       key: ${{ runner.os }}-docker-buildx-${{ hashFiles('Dockerfile', 'index.html') }}
+    #       path: /tmp/.buildx-cache
+    #       restore-keys: ${{ runner.os }}-docker-buildx-
+      - name: Build the image once without API credentials
+        uses: docker/build-push-action@v6
+        with:
+          context: ${{ env.APP_DIR }}
+          tags: ${{ env.CI_IMAGE }}
+          load: true
+          push: false
+      - name: Check metadata
+        run: |
+          image_environment="$(docker image inspect --format '{{json .Config.Env}}' "$CI_IMAGE")"
+          if [[ "$image_environment" == *'OPENWEATHER_API_KEY='* ]]; then
+            echo "::error::Klucz API nie może być częścią konfiguracji obrazu."
+            exit 1
+          fi
+      - name: Save image to tar
+        run: |
+          docker save "${{ env.CI_IMAGE }}" -o image.tar
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: faza1-weather-image
+          path: image.tar

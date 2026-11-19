@@ -1,9 +1,9 @@
 name: 13-02 Build Docker image with actions/cache 02
 
 on:
-  push:
+  # push:
     # branches: [ cw13 ]
-  pull_request:
+  # pull_request:
     # branches: [ cw13 ]
   workflow_dispatch:
 
