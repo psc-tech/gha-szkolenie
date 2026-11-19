@@ -1,4 +1,4 @@
-name: 15A FAZA-2 — Pogoda WWW i API
+name: 15A FAZA-2 — Cache warstw Docker
 
 on:
   workflow_dispatch:
@@ -6,7 +6,7 @@ on:
     branches: [main]
     paths:
       - CWICZENIA/15A-Cwiczenia-pipeline-gha/pogoda_python_flusk/**
-      - .github/workflows/15A-FAZA-1-pogoda.yaml
+      - .github/workflows/15A-FAZA2-pogoda.yaml
 
 permissions:
   contents: read
@@ -19,11 +19,11 @@ defaults:
 # Wspólne Repository variables (wartości początkowe):
 # DOCKERHUB_USERNAME=piotrskoska
 # DOCKER_IMAGE_NAME=python_pogoda
-# FAZA1_IMAGE_TAG=faza1
-# FAZA1_APP_PORT=18090
-# FAZA1_CONTAINER_NAME=pogoda_api_faza1
-# FAZA1_WEATHER_CITY=Warsaw
-# FAZA1_DEPLOY_BRANCH=main
+# FAZA2_IMAGE_TAG=faza2
+# FAZA2_APP_PORT=18092
+# FAZA2_CONTAINER_NAME=pogoda_api_faza2
+# FAZA2_WEATHER_CITY=Warsaw
+# FAZA2_DEPLOY_BRANCH=main
 #
 # GitHub: Settings → Secrets and variables → Actions → Secrets.
 # DOCKERHUB_TOKEN: prawdziwy token Docker Hub z prawem publikacji obrazu.
@@ -31,17 +31,20 @@ defaults:
 # Nie wpisuj wartości sekretów do YAML, Dockerfile, build-args ani plików obrazu.
 # OPENWEATHER_API_KEY jest przekazywany wyłącznie do uruchamianego kontenera.
 #
-# Domyślnie: HTTP na porcie hosta 18090 → Nginx 8080 → Python 127.0.0.1:8000.
+# Domyślnie: HTTP na porcie hosta 18092 → Nginx 8080 → Python 127.0.0.1:8000.
 # Opcjonalny HTTPS obsługuje ten sam obraz po zamontowaniu certyfikatu i klucza.
-# Konfiguracja HTTPS oraz instrukcja zadania: CWICZENIA/15A-Cwiczenia-pipeline-gha/FAZA-1/README.md.
+# Konfiguracja HTTPS oraz instrukcja zadania: CWICZENIA/15A-Cwiczenia-pipeline-gha/FAZA-2/README.md.
+# Cache przyspiesza build; nie zastępuje image.tar, prawdziwego testu ani publikacji.
+# Dokumentacja: https://docs.docker.com/build/cache/backends/gha/
+# API v2 i wymagania: https://docs.docker.com/build/ci/github-actions/cache/
 env:
   APP_DIR: ./CWICZENIA/15A-Cwiczenia-pipeline-gha/pogoda_python_flusk
-  DOCKERHUB_USERNAME: ${{ vars.DOCKERHUB_USERNAME2 || 'piotrskoska' }}
-  HUB_IMAGE_BASE: ${{ vars.DOCKERHUB_USERNAME2 || 'piotrskoska' }}/${{ vars.DOCKER_IMAGE_NAME || 'python_pogoda' }}
-  CI_IMAGE: ${{ vars.DOCKERHUB_USERNAME2 || 'piotrskoska' }}/${{ vars.DOCKER_IMAGE_NAME || 'python_pogoda' }}:ci-${{ github.sha }}
-  IMAGE_TAG: ${{ vars.FAZA2_IMAGE_TAG || 'faza12' }}
-  APP_PORT: ${{ vars.FAZA2_APP_PORT || '18090' }}
-  CONTAINER_NAME: ${{ vars.FAZA2_CONTAINER_NAME || 'pogoda_api_faza12' }}
+  DOCKERHUB_USERNAME: ${{ vars.DOCKERHUB_USERNAME || 'piotrskoska' }}
+  HUB_IMAGE_BASE: ${{ vars.DOCKERHUB_USERNAME || 'piotrskoska' }}/${{ vars.DOCKER_IMAGE_NAME || 'python_pogoda' }}
+  CI_IMAGE: ${{ vars.DOCKERHUB_USERNAME || 'piotrskoska' }}/${{ vars.DOCKER_IMAGE_NAME || 'python_pogoda' }}:ci-faza2-${{ github.sha }}
+  IMAGE_TAG: ${{ vars.FAZA2_IMAGE_TAG || 'faza2' }}
+  APP_PORT: ${{ vars.FAZA2_APP_PORT || '18092' }}
+  CONTAINER_NAME: ${{ vars.FAZA2_CONTAINER_NAME || 'pogoda_api_faza2' }}
   WEATHER_CITY: ${{ vars.FAZA2_WEATHER_CITY || 'Warsaw' }}
 
 jobs:
@@ -58,16 +61,6 @@ jobs:
           version: latest
           driver: docker-container
 
-      # # Cache dla katalogu z warstwami buildx 
-      # - name: Cache Docker layers
-      #   uses: actions/cache@v4
-      #   with:
-      #     path: |
-      #       /tmp/.buildx-cache
-      #     key: ${{ runner.os }}-docker-buildx-${{ hashFiles('Dockerfile', 'index.html') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-docker-buildx-
-
       - name: Build image without API credentials
         uses: docker/build-push-action@v6
         with:
@@ -75,6 +68,8 @@ jobs:
           tags: ${{ env.CI_IMAGE }}
           load: true
           push: false
+          # Stały scope pozwala użyć warstw poprzedniego przebiegu tej fazy.
+          # Buildx/BuildKit obsługują GitHub Cache API v2; brak dodatkowego PAT.
           cache-from: type=gha,version=2,scope=15a-pogoda-faza2
           cache-to: type=gha,version=2,scope=15a-pogoda-faza2,mode=max
 
@@ -122,7 +117,7 @@ jobs:
           fi
           docker run -d \
             --name pogoda_api_faza2_ci \
-            -p 127.0.0.1:18090:8080 \
+            -p 127.0.0.1:18092:8080 \
             -e OPENWEATHER_API_KEY \
             "$CI_IMAGE"
 
@@ -132,12 +127,12 @@ jobs:
             --retry 15 --retry-all-errors --retry-delay 2 \
             --retry-max-time 60 --max-time 5 \
             --output /dev/null \
-            http://127.0.0.1:18090/healthz
+            http://127.0.0.1:18092/healthz
 
       - name: Test WWW and API against real OpenWeather data
         run: |
           python3 "${APP_DIR}/tests/smoke_test.py" \
-            --base-url http://127.0.0.1:18090 \
+            --base-url http://127.0.0.1:18092 \
             --city "$WEATHER_CITY"
 
       - name: Show CI container logs on failure
@@ -170,7 +165,7 @@ jobs:
         uses: docker/login-action@v3
         with:
           username: ${{ env.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN2 }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Tag and publish the exact image that passed the tests
         id: publish
@@ -243,7 +238,7 @@ jobs:
         uses: docker/login-action@v3
         with:
           username: ${{ env.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN2 }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
           # Wylogowanie i usunięcie pliku tokenu wykonuje jawny ostatni krok.
           logout: false
 
