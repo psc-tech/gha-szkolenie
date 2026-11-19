@@ -1,8 +1,6 @@
 name: 12A Pogoda input output
 
 on:
-  #push:
-  #   branches: [ main, feature/08-pogoda-api ]
   workflow_dispatch:
     inputs:
       first_name:
