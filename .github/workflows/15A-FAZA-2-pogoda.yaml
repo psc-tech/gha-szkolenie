@@ -2,11 +2,11 @@ name: 15A FAZA-2 — Cache warstw Docker
 
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths:
-      - CWICZENIA/15A-Cwiczenia-pipeline-gha/pogoda_python_flusk/**
-      - .github/workflows/15A-FAZA2-pogoda.yaml
+  # push:
+  #   branches: [main]
+  #   paths:
+  #     - CWICZENIA/15A-Cwiczenia-pipeline-gha/pogoda_python_flusk/**
+  #     - .github/workflows/15A-FAZA2-pogoda.yaml
 
 permissions:
   contents: read
@@ -39,9 +39,9 @@ defaults:
 # API v2 i wymagania: https://docs.docker.com/build/ci/github-actions/cache/
 env:
   APP_DIR: ./CWICZENIA/15A-Cwiczenia-pipeline-gha/pogoda_python_flusk
-  DOCKERHUB_USERNAME: ${{ vars.DOCKERHUB_USERNAME || 'piotrskoska' }}
-  HUB_IMAGE_BASE: ${{ vars.DOCKERHUB_USERNAME || 'piotrskoska' }}/${{ vars.DOCKER_IMAGE_NAME || 'python_pogoda' }}
-  CI_IMAGE: ${{ vars.DOCKERHUB_USERNAME || 'piotrskoska' }}/${{ vars.DOCKER_IMAGE_NAME || 'python_pogoda' }}:ci-faza2-${{ github.sha }}
+  DOCKERHUB_USERNAME: ${{ vars.DOCKERHUB_USERNAME2 || 'piotrskoska' }}
+  HUB_IMAGE_BASE: ${{ vars.DOCKERHUB_USERNAME2 || 'piotrskoska' }}/${{ vars.DOCKER_IMAGE_NAME || 'python_pogoda' }}
+  CI_IMAGE: ${{ vars.DOCKERHUB_USERNAME2 || 'piotrskoska' }}/${{ vars.DOCKER_IMAGE_NAME || 'python_pogoda' }}:ci-faza2-${{ github.sha }}
   IMAGE_TAG: ${{ vars.FAZA2_IMAGE_TAG || 'faza2' }}
   APP_PORT: ${{ vars.FAZA2_APP_PORT || '18092' }}
   CONTAINER_NAME: ${{ vars.FAZA2_CONTAINER_NAME || 'pogoda_api_faza2' }}
@@ -165,7 +165,7 @@ jobs:
         uses: docker/login-action@v3
         with:
           username: ${{ env.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          password: ${{ secrets.DOCKERHUB_TOKEN2 }}
 
       - name: Tag and publish the exact image that passed the tests
         id: publish
@@ -238,7 +238,7 @@ jobs:
         uses: docker/login-action@v3
         with:
           username: ${{ env.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          password: ${{ secrets.DOCKERHUB_TOKEN2 }}
           # Wylogowanie i usunięcie pliku tokenu wykonuje jawny ostatni krok.
           logout: false
 

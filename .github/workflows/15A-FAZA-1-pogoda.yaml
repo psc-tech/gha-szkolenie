@@ -2,11 +2,11 @@ name: 15A FAZA-1 — Pogoda WWW i API
 
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths:
-      - CWICZENIA/15A-Cwiczenia-pipeline-gha/pogoda_python_flusk/**
-      - .github/workflows/15A-FAZA-1-pogoda.yaml
+  # push:
+  #   branches: [main]
+  #   paths:
+  #     - CWICZENIA/15A-Cwiczenia-pipeline-gha/pogoda_python_flusk/**
+  #     - .github/workflows/15A-FAZA-1-pogoda.yaml
 
 permissions:
   contents: read
