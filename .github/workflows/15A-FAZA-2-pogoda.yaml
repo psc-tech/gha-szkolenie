@@ -76,7 +76,7 @@ jobs:
           load: true
           push: false
           cache-from: type=gha,version=2,scope=15a-pogoda-faza2
-+         cache-to: type=gha,version=2,scope=15a-pogoda-faza2,mode=max
+          cache-to: type=gha,version=2,scope=15a-pogoda-faza2,mode=max
 
       - name: Verify image metadata contains no API key configuration
         run: |
