@@ -127,12 +127,12 @@ jobs:
             --retry 15 --retry-all-errors --retry-delay 2 \
             --retry-max-time 60 --max-time 5 \
             --output /dev/null \
-            http://127.0.0.1:18092/healthz
+            http://127.0.0.1:18093/healthz
 
       - name: Test WWW and API against real OpenWeather data
         run: |
           python3 "${APP_DIR}/tests/smoke_test.py" \
-            --base-url http://127.0.0.1:18092 \
+            --base-url http://127.0.0.1:18093 \
             --city "$WEATHER_CITY"
 
       - name: Show CI container logs on failure
