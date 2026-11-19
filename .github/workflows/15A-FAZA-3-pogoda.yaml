@@ -117,7 +117,7 @@ jobs:
           fi
           docker run -d \
             --name pogoda_api_faza3_ci \
-            -p 127.0.0.1:18092:8080 \
+            -p 127.0.0.1:18093:8080 \
             -e OPENWEATHER_API_KEY \
             "$CI_IMAGE"
 
@@ -149,6 +149,11 @@ jobs:
     if: >-
       (github.event_name == 'push' || github.event_name == 'workflow_dispatch') &&
       github.ref_name == (vars.FAZA3_DEPLOY_BRANCH || 'main')
+    strategy:
+      fail-fast: false
+      matrix:
+        environment: [test, dev, prod]
+    environment: ${{ matrix.environment }}
     timeout-minutes: 15
     outputs:
       image_digest: ${{ steps.publish.outputs.image_digest }}
