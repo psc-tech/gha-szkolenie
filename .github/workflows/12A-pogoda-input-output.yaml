@@ -63,7 +63,7 @@ jobs:
           WEATHER_CITY: ${{ inputs.city }}
           APP_PORT: ${{ inputs.app_port }}
           DOCKERHUB_USERNAME: ${{ vars.DOCKERHUB_USERNAME2 }}
-          DOCKER_IMAGE_NAME: ${{ vars.DOCKER_IMAGE_NAME2 }}
+          DOCKER_IMAGE_NAME: ${{ vars.DOCKER_IMAGE_NAME }}
         run: |
           set -euo pipefail
           if ! [[ "$DOCKERHUB_USERNAME" =~ ^[a-z0-9][a-z0-9_-]*$ ]] ||
